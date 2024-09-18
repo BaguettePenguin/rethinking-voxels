@@ -94,6 +94,7 @@ bool isEmissive(int mat) {
         mat == 10680 || // ochre       froglight
         mat == 10684 || // verdant     froglight
         mat == 10688 || // pearlescent froglight
+        mat == 10696 || // sculk 
         mat == 10704 || // active sculk sensor
         mat == 10788 ||
         mat == 10708 || // spawner
@@ -415,6 +416,14 @@ vec3 getLightCol(int mat) {
             lightcol = vec3(PINKFROG_COL_R, PINKFROG_COL_G, PINKFROG_COL_B);
             #endif
             break;
+        case 10696: // sculk
+            float time = syncedTime;
+            vec3 sculk_dark = vec3(SCULK_COL_R, 0.25, 0.25); 
+            vec3 sculk_bright = vec3(SCULK_COL_R, SCULK_COL_G, SCULK_COL_B);
+            float intensity = (sin(time) + 1.0) / 2.0;
+            vec3 color = mix(sculk_dark, sculk_bright, intensity);
+            lightcol = color;
+            break;
         case 10704: // active sculk sensor
         case 10788:
             #ifdef HARDCODED_SCULK_COL
@@ -718,6 +727,9 @@ int getLightLevel(int mat) {
         case 10688: // pearlescent froglight
             lightlevel = BRIGHTNESS_PINKFROG;
             break;
+        case 10696:
+            lightlevel = 3;
+        break;
         case 10704: // active sculk sensor
         case 10788:
             lightlevel = SENSOR_BRIGHTNESS_SCULK;
